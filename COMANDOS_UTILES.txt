@@ -72,6 +72,8 @@
 
 ++ Salir del contenedor de ubuntu
 --- exit
+--- en estos momentos ya los comandos apt no tendrán efecto ya que 
+hemos salido del contenedor
 
 
 
