@@ -1,1 +1,75 @@
+++ Instalar actualizaciones
+--- sudo vso update-check 
+--- sudo vso trigger-update --now
+
+
+++ Crear contenedor par instalar paquetes de Ubuntu
+--- apx init
+--- y
+--- apx 
+--- Enter
+
+
+++ Instalar firewall
+--- sudo apt install ufw
+--- sudo ufw enable
+--- sudo apt install gufw
+
+
+++ Instalar htop
+--- sudo apt install htop
+
+
+++ Instalar synaptic
+--- sudo apt-get install synaptic
+
+
+++ Instalar codecs
+--- sudo apt-get install ubuntu-restricted-extras
+
+
+++ Instalar tlp (herramienta para mejorar la duración de la batería en laptops)
+--- sudo apt install tlp tlp-rdw
+--- sudo systemctl enable tlp
+
+
+++ Instalar wine
+--- sudo apt-get install wine64
+
+
+++ Instalar fatpac
+--- sudo apt-get install flatpac
+
+
+++ Instalar gimp
+--- sudo apt-get install gimp
+
+
+++ Instalar python
+--- sudo apt-get install python3
+
+
+++ Instalar java
+--- sudo apt install default-jdk 
+
+
+++ Desactivar envío de telemetría
+--- Ubicar la sección de diagnósticos 
+----- Desactivar la sección de automatic problem reporting
+
+
+++ Limpiar el sistema de datos temporales
+--- sudo apt-get autoclean
+
+
+++ Eliminar dependencias que no se están usando
+--- sudo apt-get autoremove 
+
+
+++ Limpiar el cache
+--- sudo apt-get clean
+
+
+
+
 
