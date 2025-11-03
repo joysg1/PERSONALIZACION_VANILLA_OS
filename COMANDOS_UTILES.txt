@@ -70,6 +70,10 @@
 --- sudo apt-get clean
 
 
+++ Salir del contenedor de ubuntu
+--- exit
+
+
 
 
 
