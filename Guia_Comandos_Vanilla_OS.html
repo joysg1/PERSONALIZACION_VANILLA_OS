@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Comandos Vanilla OS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', 'Fira Code', monospace;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(30, 30, 46, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 154, 0, 0.3);
+            overflow: hidden;
+            border: 1px solid #ff9a00;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #ff9a00 0%, #ff6a00 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        
+        .vanilla-icon {
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            color: #a8e6cf;
+        }
+        
+        nav {
+            background: rgba(255, 154, 0, 0.95);
+            padding: 18px 0;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #ff6a00;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 35px;
+            gap: 35px;
+        }
+        
+        .sidebar {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(42, 42, 62, 0.8);
+            padding: 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 154, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .content {
+            flex: 3;
+            min-width: 320px;
+        }
+        
+        h2 {
+            color: #ff9a00;
+            border-bottom: 3px solid #ff9a00;
+            padding-bottom: 15px;
+            margin: 35px 0 25px;
+            font-size: 2rem;
+        }
+        
+        h3 {
+            color: #ffb74d;
+            margin: 28px 0 18px;
+            font-size: 1.4rem;
+        }
+        
+        .category {
+            margin-bottom: 45px;
+            background: rgba(42, 42, 62, 0.6);
+            padding: 28px;
+            border-radius: 12px;
+            border-left: 6px solid #ff9a00;
+            transition: transform 0.3s ease;
+        }
+        
+        .category:hover {
+            transform: translateX(5px);
+        }
+        
+        .command {
+            background: linear-gradient(135deg, rgba(42, 42, 62, 0.8) 0%, rgba(30, 30, 46, 0.8) 100%);
+            padding: 20px;
+            margin: 18px 0;
+            border-radius: 10px;
+            border-left: 5px solid #ffb74d;
+            border: 1px solid rgba(255, 183, 77, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .command:hover {
+            border-color: #ffb74d;
+            box-shadow: 0 6px 20px rgba(255, 183, 77, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .command code {
+            background: rgba(255, 154, 0, 0.1);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            color: #ffb74d;
+            font-weight: bold;
+            border: 1px solid rgba(255, 154, 0, 0.2);
+            display: inline-block;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .command-desc {
+            margin-top: 12px;
+            color: #a8e6cf;
+            line-height: 1.6;
+        }
+        
+        .sub-command {
+            margin-left: 28px;
+            background: rgba(30, 30, 46, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 8px;
+            border-left: 3px solid #a8e6cf;
+        }
+        
+        .sub-command code {
+            color: #a8e6cf;
+            background: rgba(168, 230, 207, 0.1);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(42, 42, 62, 0.95);
+            color: #a8e6cf;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 154, 0, 0.3);
+        }
+        
+        .search-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        #search {
+            width: 100%;
+            max-width: 550px;
+            padding: 18px 25px;
+            background: rgba(30, 30, 46, 0.8);
+            border: 2px solid rgba(255, 154, 0, 0.5);
+            border-radius: 30px;
+            font-size: 16px;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+        
+        #search:focus {
+            outline: none;
+            border-color: #ff9a00;
+            box-shadow: 0 0 25px rgba(255, 154, 0, 0.5);
+        }
+        
+        #search::placeholder {
+            color: #888;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #ffb74d, #ff9a00);
+            color: #000;
+            font-weight: bold;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        
+        .vanilla-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff9a00, #ff6a00);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .apx-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .system-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #66bb6a, #4caf50);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .container-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+        
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                margin-right: 0;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* Efectos especiales */
+        .terminal-effect {
+            position: relative;
+        }
+        
+        .terminal-effect::after {
+            content: '|';
+            animation: blink 1s infinite;
+            color: #ff9a00;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 30, 46, 0.8);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #ff9a00, #ff6a00);
+            border-radius: 8px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #ff6a00, #e65100);
+        }
+        
+        /* Índice mejorado */
+        .index-item {
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            background: rgba(42, 42, 62, 0.8);
+            border-radius: 8px;
+            border-left: 4px solid #ff9a00;
+            transition: all 0.3s ease;
+        }
+        
+        .index-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(255, 154, 0, 0.2);
+        }
+        
+        .index-link {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+        }
+        
+        .index-link:hover {
+            color: #ff9a00;
+        }
+
+        /* Notas y advertencias */
+        .note {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #fcd34d;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #fca5a5;
+        }
+
+        .info {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #93c5fd;
+        }
+
+        .success {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid #2ecc71;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #a8e6cf;
+        }
+
+        /* Workflow steps */
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(42, 42, 62, 0.6);
+            border-radius: 8px;
+            border-left: 4px solid #ff9a00;
+        }
+
+        .step-number {
+            background: #ff9a00;
+            color: #000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .step-content {
+            flex-grow: 1;
+        }
+
+        .step-command {
+            background: rgba(255, 154, 0, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 5px 0;
+            font-family: 'Fira Code', monospace;
+            color: #ffb74d;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Vanilla OS <span class="vanilla-icon">🍦</span> Commands</h1>
+            <p class="subtitle">Manual completo de configuración y administración</p>
+        </header>
+        
+        <nav>
+            <div class="nav-container">
+                <a href="#actualizaciones" class="nav-item">Actualizaciones</a>
+                <a href="#contenedores" class="nav-item">Contenedores</a>
+                <a href="#seguridad" class="nav-item">Seguridad</a>
+                <a href="#software" class="nav-item">Software</a>
+                <a href="#mantenimiento" class="nav-item">Mantenimiento</a>
+            </div>
+        </nav>
+        
+        <div class="search-container">
+            <input type="text" id="search" placeholder="user@vanilla:~$ Buscar comandos...">
+        </div>
+        
+        <main>
+            <div class="sidebar">
+                <h2>Índice de Secciones</h2>
+                <div id="index-list">
+                    <!-- El índice se generará automáticamente con JavaScript -->
+                </div>
+            </div>
+            
+            <div class="content" id="content">
+                <!-- Actualizaciones del Sistema -->
+                <div class="category" id="actualizaciones">
+                    <h2>Actualizaciones del Sistema <span class="vanilla-badge">UPDATES</span></h2>
+                    
+                    <div class="command">
+                        <code>sudo vso update-check</code>
+                        <div class="command-desc">Verificar si hay actualizaciones disponibles</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo vso trigger-update --now</code>
+                        <div class="command-desc">Ejecutar actualizaciones inmediatamente</div>
+                    </div>
+
+                    <div class="info">
+                        🔄 <strong>Vanilla System Operator (vso):</strong> Herramienta nativa de Vanilla OS para gestionar actualizaciones del sistema.
+                    </div>
+
+                    <div class="note">
+                        💡 <strong>Recomendación:</strong> Ejecuta <code>sudo vso update-check</code> regularmente para mantener tu sistema actualizado.
+                    </div>
+                </div>
+
+                <!-- Gestión de Contenedores APX -->
+                <div class="category" id="contenedores">
+                    <h2>Gestión de Contenedores APX <span class="apx-badge">APX</span></h2>
+                    
+                    <h3>Crear Contenedor Ubuntu</h3>
+                    <div class="workflow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-command">apx init</div>
+                            <div class="command-desc">Inicializar nuevo contenedor</div>
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-command">y</div>
+                            <div class="command-desc">Confirmar creación del contenedor</div>
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-command">apx</div>
+                            <div class="command-desc">Ingresar al contenedor</div>
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-command">Enter</div>
+                            <div class="command-desc">Acceder al shell del contenedor</div>
+                        </div>
+                    </div>
+
+                    <div class="command">
+                        <code>exit</code>
+                        <div class="command-desc">Salir del contenedor Ubuntu</div>
+                    </div>
+
+                    <div class="warning">
+                        ⚠️ <strong>Importante:</strong> Al salir del contenedor con <code>exit</code>, los comandos <code>apt</code> ya no tendrán efecto ya que hemos salido del entorno del contenedor.
+                    </div>
+
+                    <div class="info">
+                        📦 <strong>APX:</strong> Sistema de gestión de contenedores de Vanilla OS que permite instalar paquetes de diferentes distribuciones de forma aislada.
+                    </div>
+                </div>
+
+                <!-- Seguridad y Firewall -->
+                <div class="category" id="seguridad">
+                    <h2>Seguridad y Firewall <span class="system-badge">SECURITY</span></h2>
+                    
+                    <div class="command">
+                        <code>sudo apt install ufw</code>
+                        <div class="command-desc">Instalar Uncomplicated Firewall</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo ufw enable</code>
+                        <div class="command-desc">Activar el firewall</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo apt install gufw</code>
+                        <div class="command-desc">Instalar interfaz gráfica para el firewall</div>
+                    </div>
+
+                    <div class="success">
+                        🔒 <strong>Firewall Activado:</strong> UFW proporciona una capa adicional de seguridad para tu sistema.
+                    </div>
+
+                    <h3>Desactivar Telemetría</h3>
+                    <div class="command">
+                        <code>Ubicar la sección de diagnósticos</code>
+                        <div class="command-desc">Navegar a configuraciones del sistema</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>Desactivar "Automatic Problem Reporting"</code>
+                        <div class="command-desc">Deshabilitar envío automático de reportes</div>
+                    </div>
+
+                    <div class="note">
+                        📊 <strong>Privacidad:</strong> Desactivar el reporte automático de problemas ayuda a proteger tu privacidad.
+                    </div>
+                </div>
+
+                <!-- Instalación de Software -->
+                <div class="category" id="software">
+                    <h2>Instalación de Software <span class="vanilla-badge">SOFTWARE</span></h2>
+                    
+                    <h3>Herramientas del Sistema</h3>
+                    <div class="command">
+                        <code>sudo apt install htop</code>
+                        <div class="command-desc">Instalar monitor del sistema mejorado</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo apt-get install synaptic</code>
+                        <div class="command-desc">Instalar gestor de paquetes gráfico</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo apt-get install ubuntu-restricted-extras</code>
+                        <div class="command-desc">Instalar codecs multimedia</div>
+                    </div>
+
+                    <h3>Optimización</h3>
+                    <div class="command">
+                        <code>sudo apt install tlp tlp-rdw</code>
+                        <div class="command-desc">Instalar herramienta para optimizar batería</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo systemctl enable tlp</code>
+                        <div class="command-desc">Habilitar TLP para que inicie automáticamente</div>
+                    </div>
+
+                    <div class="info">
+                        🔋 <strong>TLP:</strong> Mejora significativamente la duración de la batería en laptops.
+                    </div>
+
+                    <h3>Compatibilidad y Desarrollo</h3>
+                    <div class="command">
+                        <code>sudo apt-get install wine64</code>
+                        <div class="command-desc">Instalar Wine para aplicaciones Windows</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo apt-get install flatpak</code>
+                        <div class="command-desc">Instalar soporte para Flatpak</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo apt-get install gimp</code>
+                        <div class="command-desc">Instalar editor de imágenes GIMP</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo apt-get install python3</code>
+                        <div class="command-desc">Instalar Python 3</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo apt install default-jdk</code>
+                        <div class="command-desc">Instalar Java Development Kit</div>
+                    </div>
+
+                    <div class="note">
+                        🐍 <strong>Python:</strong> Se instala Python 3, que es la versión actual y recomendada.
+                    </div>
+                </div>
+
+                <!-- Mantenimiento del Sistema -->
+                <div class="category" id="mantenimiento">
+                    <h2>Mantenimiento del Sistema <span class="system-badge">MAINTENANCE</span></h2>
+                    
+                    <h3>Limpieza del Sistema</h3>
+                    <div class="command">
+                        <code>sudo apt-get autoclean</code>
+                        <div class="command-desc">Limpiar paquetes .deb obsoletos de la cache</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo apt-get autoremove</code>
+                        <div class="command-desc">Eliminar dependencias que no se están usando</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo apt-get clean</code>
+                        <div class="command-desc">Limpiar completamente la cache de paquetes</div>
+                    </div>
+
+                    <div class="workflow">
+                        <h3>Flujo de Mantenimiento Recomendado</h3>
+                        <div class="workflow-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-command">sudo apt-get autoclean</div>
+                                <div class="command-desc">Limpiar paquetes obsoletos</div>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-command">sudo apt-get autoremove</div>
+                                <div class="command-desc">Remover dependencias innecesarias</div>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-command">sudo apt-get clean</div>
+                                <div class="command-desc">Limpiar cache completamente</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="success">
+                        🧹 <strong>Mantenimiento Regular:</strong> Ejecuta estos comandos periódicamente para mantener tu sistema limpio y eficiente.
+                    </div>
+                </div>
+
+                <!-- Conceptos de Vanilla OS -->
+                <div class="category" id="conceptos">
+                    <h2>Conceptos de Vanilla OS <span class="vanilla-badge">CONCEPTS</span></h2>
+                    
+                    <div class="info">
+                        🍦 <strong>Vanilla OS:</strong> Distribución Linux inmutable basada en Ubuntu que utiliza un sistema de contenedores para instalar software.
+                    </div>
+
+                    <div class="note">
+                        📚 <strong>Características Principales:</strong>
+                        <br>• <strong>Sistema Inmutable:</strong> El sistema base no cambia, mejorando estabilidad
+                        <br>• <strong>Contenedores APX:</strong> Aislamiento de aplicaciones mediante contenedores
+                        <br>• <strong>Actualizaciones Atómicas:</strong> Las actualizaciones se aplican de forma completa o no se aplican
+                        <br>• <strong>Seguridad Mejorada:</strong> Menor superficie de ataque
+                    </div>
+
+                    <div class="warning">
+                        💡 <strong>Flujo de Trabajo:</strong>
+                        <br>1. Usa <code>apx</code> para instalar software en contenedores
+                        <br>2. Usa <code>sudo vso</code> para gestionar el sistema base
+                        <br>3. Mantén separadas las aplicaciones del sistema operativo
+                    </div>
+                </div>
+
+                <!-- Resolución de Problemas -->
+                <div class="category" id="problemas">
+                    <h2>Resolución de Problemas <span class="system-badge">TROUBLESHOOT</span></h2>
+                    
+                    <div class="command">
+                        <code>sudo vso update-check</code>
+                        <div class="command-desc">Primer paso para verificar actualizaciones pendientes</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>apx --help</code>
+                        <div class="command-desc">Ver ayuda sobre comandos de APX</div>
+                    </div>
+                    
+                    <div class="command">
+                        <code>sudo ufw status</code>
+                        <div class="command-desc">Verificar estado del firewall</div>
+                    </div>
+
+                    <div class="note">
+                        🔍 <strong>Problemas Comunes:</strong>
+                        <br>• <strong>Comandos apt no funcionan:</strong> Verifica que estés dentro de un contenedor APX
+                        <br>• <strong>Actualizaciones fallidas:</strong> Usa <code>sudo vso trigger-update --now</code>
+                        <br>• <strong>Firewall bloquea conexiones:</strong> Verifica reglas con <code>sudo ufw status</code>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Vanilla OS Commands Manual &copy; 2024 - Immutable Desktop Distribution</p>
+            <p style="margin-top: 10px; font-size: 0.9rem; color: #ff9a00;">Simple, Secure, Immutable</p>
+        </footer>
+    </div>
+
+    <script>
+        // Generar índice automáticamente
+        document.addEventListener('DOMContentLoaded', function() {
+            const categories = document.querySelectorAll('.category');
+            const indexList = document.getElementById('index-list');
+            
+            categories.forEach(category => {
+                const categoryId = category.id;
+                const categoryTitle = category.querySelector('h2').textContent;
+                
+                const listItem = document.createElement('div');
+                listItem.className = 'index-item';
+                
+                const link = document.createElement('a');
+                link.href = `#${categoryId}`;
+                
+                // Iconos diferentes para cada categoría
+                let icon = '🔄';
+                if (categoryId === 'contenedores') icon = '📦';
+                else if (categoryId === 'seguridad') icon = '🔒';
+                else if (categoryId === 'software') icon = '💻';
+                else if (categoryId === 'mantenimiento') icon = '🧹';
+                else if (categoryId === 'conceptos') icon = '📚';
+                else if (categoryId === 'problemas') icon = '🔧';
+                
+                link.textContent = `${icon} ${categoryTitle.replace('UPDATES', '').replace('APX', '').replace('SECURITY', '').replace('SOFTWARE', '').replace('MAINTENANCE', '').replace('CONCEPTS', '').replace('TROUBLESHOOT', '').trim()}`;
+                link.className = 'index-link';
+                
+                listItem.appendChild(link);
+                indexList.appendChild(listItem);
+            });
+            
+            // Funcionalidad de búsqueda
+            const searchInput = document.getElementById('search');
+            const commands = document.querySelectorAll('.command');
+            const notes = document.querySelectorAll('.note, .warning, .info, .success');
+            const workflowSteps = document.querySelectorAll('.workflow-step');
+            const stepCommands = document.querySelectorAll('.step-command');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                commands.forEach(command => {
+                    const commandText = command.textContent.toLowerCase();
+                    const commandCode = command.querySelector('code');
+                    
+                    // Remover resaltado anterior
+                    if (commandCode) {
+                        commandCode.innerHTML = commandCode.textContent;
+                    }
+                    
+                    if (searchTerm === '') {
+                        command.style.display = 'block';
+                    } else if (commandText.includes(searchTerm)) {
+                        command.style.display = 'block';
+                        
+                        // Resaltar término de búsqueda
+                        if (commandCode) {
+                            const regex = new RegExp(searchTerm, 'gi');
+                            commandCode.innerHTML = commandCode.textContent.replace(regex, match => 
+                                `<span class="highlight">${match}</span>`
+                            );
+                        }
+                    } else {
+                        command.style.display = 'none';
+                    }
+                });
+
+                // Buscar en notas y advertencias
+                notes.forEach(note => {
+                    const noteText = note.textContent.toLowerCase();
+                    
+                    if (searchTerm === '') {
+                        note.style.display = 'block';
+                    } else if (noteText.includes(searchTerm)) {
+                        note.style.display = 'block';
+                    } else {
+                        note.style.display = 'none';
+                    }
+                });
+
+                // Buscar en pasos de workflow
+                workflowSteps.forEach(step => {
+                    const stepText = step.textContent.toLowerCase();
+                    
+                    if (searchTerm === '') {
+                        step.style.display = 'flex';
+                    } else if (stepText.includes(searchTerm)) {
+                        step.style.display = 'flex';
+                    } else {
+                        step.style.display = 'none';
+                    }
+                });
+
+                // Buscar en comandos de pasos
+                stepCommands.forEach(stepCmd => {
+                    const stepCmdText = stepCmd.textContent.toLowerCase();
+                    
+                    if (searchTerm === '') {
+                        stepCmd.style.display = 'block';
+                    } else if (stepCmdText.includes(searchTerm)) {
+                        stepCmd.style.display = 'block';
+                    } else {
+                        stepCmd.style.display = 'none';
+                    }
+                });
+            });
+
+            // Efecto de terminal en la búsqueda
+            searchInput.placeholder = "user@vanilla:~$ Buscar comandos...";
+        });
+
+        // Efecto de escritura en el título
+        document.addEventListener('DOMContentLoaded', function() {
+            const title = document.querySelector('h1');
+            title.classList.add('terminal-effect');
+        });
+    </script>
+</body>
+</html>
